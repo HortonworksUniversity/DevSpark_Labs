@@ -5,7 +5,7 @@ for row in reader:
 	key = row[0]
 	result[key] = row[1]
 
-## or the developer can execute: >>execfile("/root/spark/python/stubs/lab9.py")
+## or the developer can execute this instead of lines 1->6: >>execfile("/root/spark/python/stubs/lab9.py")
 
 print(result)
 type(result)
