@@ -1,4 +1,12 @@
-execfile("/root/spark/python/stubs/lab9.py")
+import csv
+reader = csv.reader(open('/root/spark/data/carriers.csv'))
+result = {}
+for row in reader:
+	key = row[0]
+	result[key] = row[1]
+
+## or the developer can execute: >>execfile("/root/spark/python/stubs/lab9.py")
+
 print(result)
 type(result)
 
