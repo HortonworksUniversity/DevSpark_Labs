@@ -8,20 +8,27 @@ import au.com.bytecode.opencsv.CSVParser
 object FinalApp{
         def main(args: Array[String]) {
 
-        val conf = new SparkConf().setAppName("WordCount")
-        conf.set("spark.serializer","org.apache.spark.serializer.KryoSerializer")
-        conf.set("spark.sepeculation","true")
+        val conf = new SparkConf().setAppName("FinalApp")
 
         val sc = new SparkContext(conf)
         sc.setLogLevel("WARN")
-
-        val input = sc.textFile("/user/root/selfishgiant.txt")
-        val wc = input.flatMap(line => line.split(" ")).
-                map(line =>  (line,1)).reduceByKey((a,b) => a+b).
-                map{case (a,b) => (b,a)}.sortByKey(false)
-
-        println("You submitted the Solution")
-        wc.take(10).foreach(println)
-        sc.stop()
+        
+        //TODO, find average taxi time for each Carrier by Airline Manufacturer, save to HDFS
+        val flight = sc.textFile(args(0)).map(line => line.split(","))
+        val carrier = sc.textFile(args(1)).map(line => line.split(","))
+        val planes = sc.textFile(args(2)).map(line => line.split(",")).filter(line => line.length == 9)
+        
+        val flightC = flight.keyBy(line => line(5))
+        val carrierC = carrier.keyBy(line => line(0))
+        
+        val join1 = flightC.join
+        
+        val join1P = join1.map{case (a,b) => (b._1(7),(a,b._1,b._2))}
+        val planesP = planes.keyBy(line => line(0))
+        val finalRdd = join1P.join(planesP)
+        val neededData = finalRdd.map{case (a,b) => ((b._1._3(1),b._2(2)),b._1._2(10).toInt)}
+        val avgTaxByAir = needData.groupByKey().mapValues(list => list.sum.toFloat/list.size)
+        
+        avgTaxByAir.saveAsTextFile(args(3))
         }
 }
