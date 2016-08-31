@@ -21,7 +21,7 @@ object FinalApp{
         val flightC = flight.keyBy(line => line(5))
         val carrierC = carrier.keyBy(line => line(0))
         
-        val join1 = flightC.join
+        val join1 = flightC.join(carrierC)
         
         val join1P = join1.map{case (a,b) => (b._1(7),(a,b._1,b._2))}
         val planesP = planes.keyBy(line => line(0))
