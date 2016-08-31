@@ -27,7 +27,7 @@ object FinalApp{
         val planesP = planes.keyBy(line => line(0))
         val finalRdd = join1P.join(planesP)
         val neededData = finalRdd.map{case (a,b) => ((b._1._3(1),b._2(2)),b._1._2(10).toInt)}
-        val avgTaxByAir = needData.groupByKey().mapValues(list => list.sum.toFloat/list.size)
+        val avgTaxByAir = neededData.groupByKey().mapValues(list => list.sum.toFloat/list.size)
         
         avgTaxByAir.saveAsTextFile(args(3))
         }
